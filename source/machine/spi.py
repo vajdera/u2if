@@ -1,3 +1,4 @@
+import atexit
 from .u2if import Device
 from . import u2if_const as report_const
 
@@ -7,9 +8,7 @@ class SPI(object):
         self.spi_index = spi_index
         self._initialized = False
         self._device = Device()
-
-    def __del__(self):
-        self.deinit()
+        atexit.register(self.deinit)
 
     def init(self, baudrate=1000000):
         report_id = report_const.SPI0_INIT if self.spi_index == 0 else report_const.SPI1_INIT

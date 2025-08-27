@@ -1,6 +1,7 @@
 import time
 import hid
 import serial
+import atexit
 from . import helper
 from . import u2if_const as report_const
 
@@ -22,11 +23,17 @@ class Device(metaclass=helper.Singleton):
             raise ValueError("No board found")
         time.sleep(1)
         self._hid = hid.Device(self.vid, self.pid, self.serial_number)
+        atexit.register(self._close)
         device = helper.find_serial_port(self.vid, self.pid, self.serial_number)
         self._serial = serial.Serial(device)
         self.firmware_version = self._get_firmware_version()
         # self._report_events_list = []
         self._irq_event_callbacks = {}
+
+    def _close(self):
+        if self._hid is not None:
+            self._hid.close()
+            self._hid = None
 
     def _reset(self):
         res = self.send_report(bytes([report_const.SYS_RESET]), response=True)

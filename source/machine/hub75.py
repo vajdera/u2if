@@ -1,5 +1,6 @@
 import queue
 import time
+import atexit
 from .u2if import Device
 from . import u2if_const as report_const
 
@@ -10,10 +11,8 @@ class HUB75:
         self._width = width
         self._height = height
         self._device = Device()
+        atexit.register(self.deinit)
         self.init()
-
-    def __del__(self):
-        self.deinit()
 
     def init(self):
         res = self._device.send_report(bytes([report_const.HUB75_INIT, self._width, self._height]))

@@ -1,3 +1,4 @@
+import atexit
 from .u2if import Device
 from . import u2if_const as report_const
 
@@ -18,11 +19,10 @@ class Pin:
         self.mode = mode
         self.has_irq = False
         self._device = Device()
+        atexit.register(self._remove_irq)
+
         if mode is not None:
             self.init(mode, pull, value)
-
-    def __del__(self):
-        self._remove_irq()
 
     @staticmethod
     def process_irq():

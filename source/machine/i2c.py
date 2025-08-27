@@ -1,3 +1,4 @@
+import atexit
 from .u2if import Device
 from . import u2if_const as report_const
 
@@ -9,10 +10,8 @@ class I2C(object):
         self.i2c_index = i2c_index
         self._initialized = False
         self._device = Device()
+        atexit.register(self.deinit)
         self._i2c_configure(frequency, pullup)
-
-    def __del__(self):
-        self.deinit()
 
     def deinit(self):
         if not self._initialized:

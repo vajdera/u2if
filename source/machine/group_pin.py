@@ -11,9 +11,6 @@ class GroupPin:
         self._mask = 0x00
         self.init(value)
 
-    def __del__(self):
-        pass
-
     def init(self, value=None):
         group_dir = self._pins[0].mode
         if group_dir not in [Pin.IN, Pin.OUT]:

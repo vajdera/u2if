@@ -1,3 +1,4 @@
+import atexit
 from .u2if import Device
 from . import u2if_const as report_const
 
@@ -7,11 +8,9 @@ class I2S:
     def __init__(self):
         self._initialized = False
         self._device = Device()
+        atexit.register(self.deinit)
         self._initialized = False
         self._init()
-
-    def __del__(self):
-        self.deinit()
 
     def _init(self):
         if self._initialized:

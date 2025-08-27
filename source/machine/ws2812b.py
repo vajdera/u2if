@@ -1,3 +1,4 @@
+import atexit
 from .u2if import Device
 from . import u2if_const as report_const
 
@@ -7,11 +8,9 @@ class WS2812B:
     def __init__(self, pin_id, direction=None, pull=None, value=None):
         self._initialized = False
         self._device = Device()
+        atexit.register(self.deinit)
         self.pin_id = pin_id
         self._initialized = self._init()
-
-    def __del__(self):
-        self.deinit()
 
     def _init(self):
         if self._initialized:

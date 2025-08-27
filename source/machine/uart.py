@@ -1,5 +1,6 @@
 import queue
 import time
+import atexit
 from .u2if import Device
 from . import u2if_const as report_const
 
@@ -13,9 +14,7 @@ class UART:
         self._rx_buffer = queue.Queue()
         self.end_line_char = 10
         self._device = Device()
-
-    def __del__(self):
-        self.deinit()
+        atexit.register(self.deinit)
 
     def init(self, baudrate=9600):
         report_id = report_const.UART0_INIT if self.uart_index == 0 else report_const.UART1_INIT
