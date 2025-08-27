@@ -14,6 +14,7 @@ COMPATIBLE_BOARD_PID_VID = [
     (0x239a, 0x00f7),  # Adafruit QTPY
 ]
 
+HID_READ_TIMEOUT_MS = 1000
 
 class Device(metaclass=helper.Singleton):
 
@@ -68,10 +69,10 @@ class Device(metaclass=helper.Singleton):
         return None
 
     def read_hid(self, report_id):
-        res = self._hid.read(report_const.HID_REPORT_SIZE)
+        res = self._hid.read(report_const.HID_REPORT_SIZE, HID_READ_TIMEOUT_MS)
         while res[0] != report_id:
             # self._report_events_list.append(res)
-            res = self._hid.read(report_const.HID_REPORT_SIZE)
+            res = self._hid.read(report_const.HID_REPORT_SIZE, HID_READ_TIMEOUT_MS)
         return res
 
     def reset_output_serial(self):
